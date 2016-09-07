@@ -1,17 +1,19 @@
 import csv
 def main():
     load_information()
+    completed_item_list = []
     while True:
         mainMenuOutput = mainMenu()
         items = mainMenuOutput[1]
+        if mainMenuOutput[0] == 'M':
+            completed_item = mark_completed()
+            completed_item_list.append(completed_item)
+        if mainMenuOutput[0] == 'C':
+            list_completed(completed_item_list)
+        if mainMenuOutput[0] == 'A':
+            add_new_items()
         if mainMenuOutput[0] == 'R':
             required_items()
-        if mainMenuOutput[0] == 'C':
-            required_items()
-        if mainMenuOutput[0] == 'A':
-            required_items()
-        if mainMenuOutput[0] == 'M':
-            mark_completed()
         if mainMenuOutput[0] == 'Q':
             break
 
@@ -54,7 +56,7 @@ def mark_completed():
     file = open("items.csv", )
     delimit_file = csv.reader(file, delimiter=",")
     item_storage = []
-    item_number = int(0)
+    item_number = int(1)
     for line in delimit_file:
         item_storage.append(line)
     for row in item_storage:  # calls the file, and prints it with file formating
@@ -67,16 +69,43 @@ def mark_completed():
     interval_conversion = [float(i) for i in interval_conversion]
     expected_price = sum(interval_conversion) #Calculates the expected price and presents it to the user
     print ("Total expected price for {} items: ${}\nEnter the number of an item to mark as completed".format(item_number, expected_price))
-    #counts number of rows, if input exceeds rows the error, for later, input 1 will be 0 on the list.
+    #counts number of rows, if input exceeds rows the error.
     numberOfItems = sum(1 for row in item_storage)
     user_input_completed = int(input())
-    while user_input_completed > numberOfItems: #error checking to check variable qualithy,
+    while user_input_completed > numberOfItems: #error checking to check variable qualiy.
         print("Invalid input")
         user_input_completed = int(input())
-
-
+    user_input_completed -= 1
+    print("{} marked as completed".format(item_storage[user_input_completed][0]))
 
     file.close()
+
+    return user_input_completed
+
+def list_completed(completed_item_list):
+    file = open("items.csv", )
+    delimit_file = csv.reader(file, delimiter=",")
+    item_storage = []
+    item_number = int(1)
+    for line in delimit_file:
+        item_storage.append(line)
+    print("Completed items:")
+    for elem in completed_item_list:
+        print("({}) {} ${:>10} ".format(elem + 1, item_storage[elem][0], item_storage[elem][1],))
+    file.close()
+
+def add_new_items():
+    file = open("items.csv", )
+    holdingList = []
+    newName = input("Name:")
+    holdingList.append(newName)
+    price = input("Price: $")
+    holdingList.append(price)
+    priority = input("Priority:")
+    holdingList.append(priority)
+    print(holdingList)
+
+
 
 main()
 
