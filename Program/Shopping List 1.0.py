@@ -97,15 +97,37 @@ def list_completed(completed_item_list):
 def add_new_items():
     file = open("items.csv", )
     holdingList = []
+    possiblePriorities = [1, 2, 3]
     newName = input("Name:")
-    holdingList.append(newName)
-    price = input("Price: $")
-    holdingList.append(price)
-    priority = input("Priority:")
-    holdingList.append(priority)
+    holdingList.append(str(newName))
+    while True:
+        try:
+            price = int(input("Price: $"))
+            val = int(price)
+            while price < 0:
+                print("Please enter a valid number")
+                price = int(input("Price:"))
+            break
+        except ValueError:
+            print("Please enter a valid number")
+    holdingList.append(str(price))
+    while True:
+        try:
+            priority = int(input("Priority:"))
+            while priority not in possiblePriorities:
+                print("Please enter either 1, 2, or 3:")
+                priority = int(input("Priority:"))  # error checking :(
+                if priority in possiblePriorities:
+                    break
+            break
+        except ValueError:
+            print("Please enter a valid number")
+    holdingList.append(str(priority))
     print(holdingList)
-
-
+    outFile = open('items.csv', 'a')
+    for word in holdingList:
+        outFile.write(word + '\n')
+    outFile.close()
 
 main()
 
