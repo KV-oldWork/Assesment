@@ -46,7 +46,7 @@ def required_items():
             item_storage.append(line)
         for row in item_storage: #Making progress towards finishing the file calling for loop.
             if "r" in row:
-                print("({}) {} ${:>10} ".format(item_number, row[0], row[1], row[2]))
+                print("({}) {:<20} ${:<12} ".format(item_number, row[0], row[1], row[2]))
                 item_number += 1
 
         file.close()
@@ -61,7 +61,7 @@ def mark_completed():
         item_storage.append(line)
     for row in item_storage:  # calls the file, and prints it with file formating
         if "r" in row:
-            print("({}) {} ${:>10} ".format(item_number, row[0], row[1], row[2]))
+            print("({}) {:<20} ${:<12} ".format(item_number, row[0], row[1], row[2]))
             item_number += 1
     interval_conversion = []
     for row in item_storage:
@@ -102,11 +102,11 @@ def add_new_items():
     holdingList.append(str(newName))
     while True:
         try:
-            price = int(input("Price: $"))
-            val = int(price)
+            price = float(input("Price: $"))
+            val = float(price)
             while price < 0:
                 print("Please enter a valid number")
-                price = int(input("Price:"))
+                price = float(input("Price:"))
             break
         except ValueError:
             print("Please enter a valid number")
@@ -123,10 +123,11 @@ def add_new_items():
         except ValueError:
             print("Please enter a valid number")
     holdingList.append(str(priority))
-    print(holdingList)
-    outFile = open('items.csv', 'a')
-    for word in holdingList:
-        outFile.write(word + '\n')
+    holdingList.append('r')
+    print("{}, ${} (priority {}) added to shopping list.".format(holdingList[0], holdingList[1], holdingList[2]))
+    with open('items.csv', 'a', newline='') as outFile:
+        outFileWriter = csv.writer(outFile)
+        outFileWriter.writerow(holdingList)
     outFile.close()
 
 main()
